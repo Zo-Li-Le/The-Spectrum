@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Image Map</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        img {
+            max-width: 100%; /* Makes the image responsive */
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Interactive Image Map</h1>
+    <img src="SPECTRUM.png" id="spectrum-image" usemap="#image-map" alt="Interactive Spectrum Map">
+    <map name="image-map">
+        <area target="_blank" alt="First Area" title="First Area" href="https://th.bing.com/th/id/OIP.Gw8UJWeWkMxTZp4v96X9KAHaE5?rs=1&amp;pid=ImgDetMain" coords="1309,1806,170" shape="circle">
+        <area target="_blank" alt="Second Area" title="Second Area" href="#" coords="788,1092,214" shape="circle">
+        <area target="_blank" alt="Third Area" title="Third Area" href="#" coords="1532,1189,295" shape="circle">
+        <area target="_blank" alt="Fourth Area" title="Fourth Area" href="#" coords="756,1588,306" shape="circle">
+    </map>
+
+    <script>
+        // Function to update area coordinates based on image size
+        function updateAreaCoords() {
+            const img = document.getElementById('spectrum-image');
+            const map = document.querySelector('map');
+            const areas = map.getElementsByTagName('area');
+
+            // Original dimensions of the image
+            const originalWidth = 1920; // Replace with the actual original width
+            const originalHeight = 1080; // Replace with the actual original height
+
+            for (let area of areas) {
+                const coords = area.coords.split(',').map(Number);
+                const newCoords = coords.map((coord, index) => {
+                    return (index % 2 === 0) 
+                        ? coord * (img.clientWidth / originalWidth) 
+                        : coord * (img.clientHeight / originalHeight);
+                });
+                area.coords = newCoords.join(',');
+            }
+        }
+
+        // Update coordinates on window resize
+        window.addEventListener('resize', updateAreaCoords);
+        window.addEventListener('load', updateAreaCoords);
+    </script>
+</body>
+</html>
